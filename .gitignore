@@ -6,3 +6,4 @@ inst/libs/
 inst/haskell/
 inst/testing/
 man/
+/*.xlsx
