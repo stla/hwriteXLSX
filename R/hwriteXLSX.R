@@ -15,6 +15,8 @@
 #'
 #' @details xxx
 #'
+#' @seealso \code{\link{cellDate}} to create a cell for a date
+#'
 #' @examples
 #' A1 <- cell(1, 1, 9.9, numberFormat="Nf2Decimal")
 #' B3 <- cell(2, 3, "abc", bold=TRUE, color="red", comment="this cell is red")
@@ -23,6 +25,7 @@
 #' jsonlite::toJSON(sheet, null="null", auto_unbox = TRUE)
 cell <- function(col, row, value, comment=NULL, numberFormat=NULL, fontname=NULL, bold=NULL, color=NULL){
   cellRef <- paste0(openxlsx:::convert_to_excel_ref(col, LETTERS), row)
+  # ou bien paste0(cellranger::num_to_letter(col), row)
   setNames(list(createCell(
     value = value,
     comment = comment,
@@ -82,7 +85,7 @@ cellDate <- function(col, row, date, comment=NULL, fontname=NULL, bold=NULL,
       warning(sprintf("Value `%s` cannnot be parsed to a date.", date))
       dateValue <- NULL
     }else{
-      dateValue <- dateParsed - as.Date("1899-12-30")
+      dateValue <- as.integer(dateParsed - as.Date("1899-12-30"))
     }
   }
   cellRef <- paste0(openxlsx:::convert_to_excel_ref(col, LETTERS), row)
@@ -96,6 +99,15 @@ cellDate <- function(col, row, date, comment=NULL, fontname=NULL, bold=NULL,
 }
 
 
+# createSheetCells <- function(dat, sheetname, guessDates=FALSE){
+#   # et les comments ?..
+#   # ou bien, à la place de dat:
+#   #   fonction (j,i) -> cell(j, i, ...) # genre Haskell FormattedCellMap
+#   #   problème des keys... NULL cell ? pas de pb:value=NULL
+#   # comment avoir toutes les keys ?.. excel B2 au lieu de (2,2)
+# }
+
+
 #' Title
 #'
 #' @param worksheet xxxx
@@ -107,7 +119,7 @@ cellDate <- function(col, row, date, comment=NULL, fontname=NULL, bold=NULL,
 #'
 #' @examples
 #' xxx
-hwriteXLSX <- function(worksheet, file, guessDates=FALSE){
+hwriteXLSX <- function(worksheet_cells, worksheet_images, file, guessDates=FALSE){
   # je n'autorise pas les flat list ?..
   # ou si, avec une fonction createWorksheet, as.worksheet... ?
   # aussi createSheet, addSheet ?..

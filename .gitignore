@@ -4,6 +4,7 @@
 .Ruserdata
 inst/libs/
 inst/haskell/
-inst/testing/
+inst/testing/*.*
+!inst/testing/*.R
 man/
 /*.xlsx

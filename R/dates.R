@@ -1,3 +1,42 @@
+#' @title Check whether has a date-like class
+#' @description Check whether a vector has a date-like class.
+#' @param x vector or factor
+#' @return A logical value, indicating whether \code{x} has a date-like class.
+#' @export
+#' @seealso \code{\link{possibly_date}}, \code{\link{guessDateFormat}}
+#' @examples x <- Sys.Date()
+#' is_date(x)
+#' x <- strftime(c("2016-06-21", "2016-11-22"), usetz=TRUE, tz="UTC")
+#' is_date(x)
+#' x <- as.POSIXct(x, tz="UTC")
+#' is_date(x)
+is_date <- function(x){
+  any(c("Date", "POSIXt") %in% class(x))
+}
+
+#' @title Check whether conversion to a date is possible
+#' @description Check whether a vector can be converted to a date.
+#' @param x vector or factor
+#' @return A logical value, indicating whether \code{\link[base]{as.Date}} can be faithfully applied to \code{x}.
+#' @export
+#' @seealso \code{\link{is_date}}, \code{\link{guessDateFormat}}
+#' @examples
+#' possibly_date("2017-03-04")
+#' possibly_date("2017-13-04")
+possibly_date <- function(x){
+  if(is_date(x)){
+    return(TRUE)
+  }else if(is.character(x) || is.factor(x)){
+    attempt <- tryCatch({
+      all(as.Date(x)==strftime(x, usetz=FALSE))
+    }, error = function(e) return(FALSE))
+    return(attempt)
+  }else{
+    return(FALSE)
+  }
+}
+
+
 #' @title Guess date format
 #' @description Guess the date format.
 #' @param x a vector (not a factor)

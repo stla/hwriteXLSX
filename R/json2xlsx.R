@@ -22,7 +22,7 @@
 #' sheet <- list(Colors = do.call(Vectorize(f), expand.grid(i=1:73, j=1:9)))
 #' json <- jsonlite::toJSON(sheet, null="null", auto_unbox = TRUE)
 #' \donttest{json2xlsx(json1, "{}", "colors.xlsx")}
-json2xlsx <- function(json1, json2, outfile, overwrite=FALSE){
+json2xlsx <- function(json1, json2="{}", outfile, overwrite=FALSE){
   if(!overwrite && file.exists(outfile)){
     stop(sprintf("File `%s` already exists.", outfile))
   }
