@@ -99,30 +99,72 @@ cellDate <- function(col, row, date, comment=NULL, fontname=NULL, bold=NULL,
 }
 
 
-# createSheetCells <- function(dat, sheetname, guessDates=FALSE){
-#   # et les comments ?..
-#   # ou bien, à la place de dat:
-#   #   fonction (j,i) -> cell(j, i, ...) # genre Haskell FormattedCellMap
-#   #   problème des keys... NULL cell ? pas de pb:value=NULL
-#   # comment avoir toutes les keys ?.. excel B2 au lieu de (2,2)
-# }
-
-
-#' Title
+#' @title Create a sheet
+#' @description Create a sheet from an appropriate data input.
 #'
-#' @param worksheet xxxx
+#' @param dat appropriate data input (see examples and vignette)
+#' @param sheetname name of the sheet
+#'
+#' @return A named list containing one element: the list of cells
+#' @export
+#' @import dict
+#'
+#' @examples
+#' sheet <- createSheet(mtcars[1:2, 1:2], "Sheet1")
+#' # write to xlsx.xlsx:
+#' \donttest{
+#' hwriteXLSX(file="xlsx.xlsx", worksheet=sheet)}
+createSheet <- function(dat, sheetname){
+  D <- dict()
+  for(j in seq_along(dat)){
+    D[[c(1,j)]] <- cell(j, 1, names(dat)[j], fontname="Verdana", bold=TRUE)
+    column <- dat[[j]]
+    for(i in seq_along(column)){
+        value <- column[[i]]
+        if(is_date(value)){
+          D[[c(i+1,j)]] <- cellDate(j, i+1, value, comment=attr(value, "comment"))
+        }else{
+          D[[c(i+1,j)]] <- cell(j, i+1, value, comment=attr(value, "comment"))
+        }
+    }
+  }
+  return(setNames(list(do.call(c, D$values())), sheetname))
+}
+
+
+#' @title Write XLSX file
+#' @description Write a XLSX file from a series of sheets, allowing inclusion of images.
+#'
+#' @param worksheet a sheet created by \code{\link{createSheet}}, or a series of
+#' such sheets concatenated by \code{c}.
+#' @param images a named list defining the images to be included in the worksheet;
+#' see vignette and examples
 #' @param file name of the xlsx file to be written
-#' @param guessDates whether to guess dates
+#' @param overwrite logical, whether to overwrite the output file if it already exists
 #'
 #' @return No returned value.
 #' @export
+#' @importFrom jsonlite toJSON
 #'
 #' @examples
-#' xxx
-hwriteXLSX <- function(worksheet_cells, worksheet_images, file, guessDates=FALSE){
-  # je n'autorise pas les flat list ?..
-  # ou si, avec une fonction createWorksheet, as.worksheet... ?
-  # aussi createSheet, addSheet ?..
-  if("data.frame")
-  invisible()
+#' sheet1 <- createSheet(iris, "iris")
+#' sheet2 <- createSheet(mtcars, "mtcars")
+#' worksheet <- c(sheet1, sheet2)
+#' \donttest{
+#' hwriteXLSX("xlsx.xlsx", worksheet)}
+hwriteXLSX <- function(file, worksheet, images=NULL, overwrite=FALSE){
+  if(!overwrite && file.exists(file)){
+    stop(sprintf("File `%s` already exists.", file))
+  }
+  if(is.null(worksheet)){
+    jsonCells <- "{}"
+  }else{
+    jsonCells <- jsonlite::toJSON(worksheet, null="null", auto_unbox = TRUE)
+  }
+  if(is.null(images)){
+    jsonImages <- "{}"
+  }else{
+    jsonImages <- jsonlite::toJSON(images, null="null", auto_unbox = TRUE)
+  }
+  json2xlsx(jsonCells, jsonImages, outfile=file, overwrite=FALSE)
 }

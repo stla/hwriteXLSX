@@ -12,5 +12,6 @@ LazyData: true
 Imports: grDevices,
     openxlsx,
     jsonlite,
-    anytime
+    anytime,
+    dict
 RoxygenNote: 6.0.1
