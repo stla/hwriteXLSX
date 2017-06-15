@@ -150,8 +150,23 @@ createSheet <- function(dat, sheetname){
 #' sheet1 <- createSheet(iris, "iris")
 #' sheet2 <- createSheet(mtcars, "mtcars")
 #' worksheet <- c(sheet1, sheet2)
-#' \donttest{
-#' hwriteXLSX("xlsx.xlsx", worksheet)}
+#' \donttest{hwriteXLSX("xlsx.xlsx", worksheet)}
+#' # include some images
+#' image1File <- system.file("images", "Lissajous.png", package="hwriteXLSX")
+#' image2File <- system.file("images", "power.png", package="hwriteXLSX")
+#' image3File <- system.file("images", "timeseries.png", package="hwriteXLSX")
+#' image1 <- list(file=image1File, left=6, top=2, width=400, height=400)
+#' image2 <- list(file=image2File, left=6, top=23, width=500, height=400)
+#' image3 <- list(file=image3File, left=13, top=2, width=500, height=400)
+#' images <- list(iris = list(image1, image2), mtcars = list(image3))
+#' \donttest{hwriteXLSX("xlsx.xlsx", worksheet, images, overwrite = TRUE)}
+#' # colors example
+#' colorMatrix <- matrix(grDevices::colours(), ncol=9)
+#' f <- function(i, j){
+#'   cell(j, i, value = colorMatrix[i,j], color = colorMatrix[i,j], bold=TRUE)
+#' }
+#' sheet <- list(Colors = do.call(Vectorize(f), expand.grid(i=1:73, j=1:9)))
+#' \donttest{hwriteXLSX("colors.xlsx", sheet)}
 hwriteXLSX <- function(file, worksheet, images=NULL, overwrite=FALSE){
   if(!overwrite && file.exists(file)){
     stop(sprintf("File `%s` already exists.", file))
@@ -164,7 +179,8 @@ hwriteXLSX <- function(file, worksheet, images=NULL, overwrite=FALSE){
   if(is.null(images)){
     jsonImages <- "{}"
   }else{
+    # todo: copier les images
     jsonImages <- jsonlite::toJSON(images, null="null", auto_unbox = TRUE)
   }
-  json2xlsx(jsonCells, jsonImages, outfile=file, overwrite=FALSE)
+  json2xlsx(jsonCells, jsonImages, outfile=file, overwrite=TRUE)
 }
