@@ -53,6 +53,9 @@ gg_tsy <-
 # ggsave("scatter.png", gg_scatter, width=6, height=6, units="cm")
 # ggsave("ts_x.png", gg_tsx, width=6, height=4, units="cm")
 # ggsave("ts_y.png", gg_tsx, width=12, height=8, units="cm")
+imageFile1 <- "scatter.png"
+imageFile2 <- "ts_x.png"
+imageFile3 <- "ts_y.png"
 imageFile1 <- "C:/zTemp/scatter.png"
 imageFile2 <- "C:/zTemp/ts_x.png"
 imageFile3 <- "C:/zTemp/ts_y.png"
@@ -67,4 +70,4 @@ image3 <- list(file=imageFile3, left=5, top=36, width=400, height=267)
 images <- list(Sheet1 = list(image1, image2, image3))
 jsonImages <- jsonlite::toJSON(images, auto_unbox = TRUE)
 
-json2xlsx(jsonSheet, jsonImages, outfile="example000.xlsx", overwrite = TRUE)
+json2xlsx(jsonSheet, jsonImages, outfile="example000testU.xlsx", overwrite = TRUE)

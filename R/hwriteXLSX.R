@@ -18,7 +18,7 @@
 #' @seealso \code{\link{cellDate}} to create a cell for a date
 #'
 #' @examples
-#' A1 <- cell(1, 1, 9.9, numberFormat="Nf2Decimal")
+#' A1 <- cell(1, 1, 9.9, numberFormat="2Decimal")
 #' B3 <- cell(2, 3, "abc", bold=TRUE, color="red", comment="this cell is red")
 #' sheet <- list(Sheet1 = c(A1, B3))
 #' # JSON string ready for json2xlsx
@@ -122,9 +122,18 @@ createSheet <- function(dat, sheetname){
     for(i in seq_along(column)){
         value <- column[[i]]
         if(is_date(value)){
-          D[[c(i+1,j)]] <- cellDate(j, i+1, value, comment=attr(value, "comment"))
+          D[[c(i+1,j)]] <- cellDate(j, i+1, value,
+                                    comment = attr(value, "comment"),
+                                    color = attr(value, "color"),
+                                    fontname = attr(value, "fontname"),
+                                    bold = attr(value, "bold"))
         }else{
-          D[[c(i+1,j)]] <- cell(j, i+1, value, comment=attr(value, "comment"))
+          D[[c(i+1,j)]] <- cell(j, i+1, value,
+                                comment = attr(value, "comment"),
+                                color = attr(value, "color"),
+                                fontname = attr(value, "fontname"),
+                                bold = attr(value, "bold"),
+                                numberFormat = attr(value, "numberFormat"))
         }
     }
   }
@@ -133,10 +142,11 @@ createSheet <- function(dat, sheetname){
 
 
 #' @title Write XLSX file
-#' @description Write a XLSX file from a series of sheets, allowing inclusion of images.
+#' @description Write a XLSX file from a series of sheets,
+#' allowing inclusion of images.
 #'
-#' @param worksheet a sheet created by \code{\link{createSheet}}, or a series of
-#' such sheets concatenated by \code{c}.
+#' @param worksheet a sheet such as one created by \code{\link{createSheet}},
+#' or a series of such sheets concatenated by \code{c}.
 #' @param images a named list defining the images to be included in the worksheet;
 #' see vignette and examples
 #' @param file name of the xlsx file to be written
