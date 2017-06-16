@@ -22,7 +22,57 @@
 #' B3 <- cell(2, 3, "abc", bold=TRUE, color="red", comment="this cell is red")
 #' sheet <- list(Sheet1 = c(A1, B3))
 #' # JSON string ready for json2xlsx
-#' jsonlite::toJSON(sheet, null="null", auto_unbox = TRUE)
+#' json <- jsonlite::toJSON(sheet, null="null", auto_unbox = TRUE)
+#' \donttest{json2xlsx(json, outfile="xlsx.xlsx")}
+#' # predefined number formats
+#' numericFormats <-
+#'   c(
+#'     "General",
+#'     "Zero",
+#'     "2Decimal",
+#'     "Max3Decimal",
+#'     "ThousandSeparator2Decimal",
+#'     "Percent",
+#'     "Percent2Decimal",
+#'     "Exponent2Decimal",
+#'     "SingleSpacedFraction",
+#'     "DoubleSpacedFraction",
+#'     "ThousandsNegativeParens",
+#'     "ThousandsNegativeRed",
+#'     "Thousands2DecimalNegativeParens",
+#'     "Tousands2DecimalNEgativeRed",
+#'     "Exponent1Decimal",
+#'     "TextPlaceHolder"
+#'   )
+#' dateFormats <-
+#'   c(
+#'     "MmSs",
+#'     "OptHMmSs",
+#'     "MmSs1Decimal",
+#'     "MmDdYy",
+#'     "DMmmYy",
+#'     "DMmm",
+#'     "MmmYy",
+#'     "HMm12Hr",
+#'     "HMmSs12Hr",
+#'     "HMm",
+#'     "HMmSs",
+#'     "MdyHMm"
+#'   )
+#' A <- lapply(seq_along(numericFormats),
+#'             function(i) cell(1, i, value=numericFormats[i]))
+#' B <- lapply(seq_along(numericFormats),
+#'             function(i) cell(2, i, value=-9999.1234,
+#'                              numberFormat=numericFormats[i]))
+#' sheet1 <- list(numericFormats = do.call(c, c(A,B)))
+#' A <- lapply(seq_along(dateFormats),
+#'             function(i) cell(1, i, value=dateFormats[i]))
+#' B <- lapply(seq_along(dateFormats),
+#'             function(i) cell(2, i, value=10000,
+#'                              numberFormat=dateFormats[i]))
+#' sheet2 <- list(dateFormats = do.call(c, c(A,B)))
+#' json <- jsonlite::toJSON(c(sheet1, sheet2), null="null", auto_unbox = TRUE)
+#' \donttest{json2xlsx(json, outfile="numberFormats.xlsx")}
 cell <- function(col, row, value, comment=NULL, numberFormat=NULL, fontname=NULL, bold=NULL, color=NULL){
   cellRef <- paste0(openxlsx:::convert_to_excel_ref(col, LETTERS), row)
   # ou bien paste0(cellranger::num_to_letter(col), row)
@@ -109,11 +159,24 @@ cellDate <- function(col, row, date, comment=NULL, fontname=NULL, bold=NULL,
 #' @export
 #' @import dict
 #'
+#' @seealso \code{\link{hwriteXLSX}}
+#'
 #' @examples
+#' # Create a sheet from a dataframe
 #' sheet <- createSheet(mtcars[1:2, 1:2], "Sheet1")
 #' # write to xlsx.xlsx:
-#' \donttest{
-#' hwriteXLSX(file="xlsx.xlsx", worksheet=sheet)}
+#' \donttest{hwriteXLSX(file="xlsx.xlsx", worksheet=sheet)}
+#' # Create a sheet from a list of lists
+#' dat <-
+#'   list(
+#'     A = list(1, 2, 3),
+#'     B = list(NULL, "a", 1000),
+#'     C = list(NA, "b")
+#'   )
+#' attr(dat$B[[2]], "color") <- "red"
+#' attr(dat$B[[2]], "comment") <- "this cell is red"
+#' attr(dat$C[[1]], "comment") <- "this cell is empty"
+#' sheet <- createSheet(dat, "Sheet1")
 createSheet <- function(dat, sheetname){
   D <- dict()
   for(j in seq_along(dat)){
@@ -177,6 +240,18 @@ createSheet <- function(dat, sheetname){
 #' }
 #' sheet <- list(Colors = do.call(Vectorize(f), expand.grid(i=1:73, j=1:9)))
 #' \donttest{hwriteXLSX("colors.xlsx", sheet)}
+#' # Write a XLSX file from a list of lists
+#' dat <-
+#'   list(
+#'     A = list(1, 2, 3),
+#'     B = list(NULL, "a", 1000),
+#'     C = list(NA, "b")
+#'   )
+#' attr(dat$B[[2]], "color") <- "red"
+#' attr(dat$B[[2]], "comment") <- "this cell is red"
+#' attr(dat$C[[1]], "comment") <- "this cell is empty"
+#' sheet <- createSheet(dat, "Sheet1")
+#' \donttest{hwriteXLSX("xlsx.xlsx", sheet, overwrite = TRUE)}
 hwriteXLSX <- function(file, worksheet, images=NULL, overwrite=FALSE){
   if(!overwrite && file.exists(file)){
     stop(sprintf("File `%s` already exists.", file))
