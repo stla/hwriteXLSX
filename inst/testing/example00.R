@@ -56,14 +56,14 @@ gg_tsy <-
 imageFile1 <- "scatter.png"
 imageFile2 <- "ts_x.png"
 imageFile3 <- "ts_y.png"
-imageFile1 <- "C:/zTemp/scatter.png"
-imageFile2 <- "C:/zTemp/ts_x.png"
-imageFile3 <- "C:/zTemp/ts_y.png"
+# imageFile1 <- "C:/zTemp/scatter.png"
+# imageFile2 <- "C:/zTemp/ts_x.png"
+# imageFile3 <- "C:/zTemp/ts_y.png"
 ggsave(imageFile1, gg_scatter, width=12, height=12, units="cm")
 ggsave(imageFile2, gg_tsx, width=12, height=8, units="cm")
 ggsave(imageFile3, gg_tsx, width=12, height=8, units="cm")
 
-# plante si fichier sur disque U !
+# plante si fichier sur disque U ! SOLVED with strict bytestrings !!
 image1 <- list(file=imageFile1, left=5, top=1, width=400, height=400)
 image2 <- list(file=imageFile2, left=5, top=22, width=400, height=267)
 image3 <- list(file=imageFile3, left=5, top=36, width=400, height=267)

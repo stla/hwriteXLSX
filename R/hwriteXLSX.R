@@ -264,7 +264,6 @@ hwriteXLSX <- function(file, worksheet, images=NULL, overwrite=FALSE){
   if(is.null(images)){
     jsonImages <- "{}"
   }else{
-    # todo: copier les images
     jsonImages <- jsonlite::toJSON(images, null="null", auto_unbox = TRUE)
   }
   json2xlsx(jsonCells, jsonImages, outfile=file, overwrite=TRUE)

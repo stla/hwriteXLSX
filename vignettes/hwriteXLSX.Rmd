@@ -40,7 +40,7 @@ The first JSON string defines the cells of the workbook while the second one def
 
 Below is a possible example of the first JSON string:
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, comment=NA}
 jsonlite::toJSON(sheet, pretty = TRUE, auto_unbox = TRUE)
 ```
 
@@ -136,3 +136,28 @@ The function `createSheet` automatically creates a date cell from the values hav
 
 
 # Inclusion of images
+
+```{r, echo=FALSE}
+image1 <- list(file="image1.png", left=5, top=1, width=400, height=400)
+image2 <- list(file="image2.png", left=5, top=22, width=400, height=267)
+images <- list(Sheet1 = list(image1, image2))
+json <- jsonlite::toJSON(images, auto_unbox = TRUE, pretty = TRUE)
+```
+
+As said as the beginning of this vignette, the `json2xlsx` function accepts another JSON string as argument, the one defining the images to be included in the worksheet. 
+Below is an example of such a JSON string:
+
+```{r, echo=FALSE, comment=NA}
+json
+```
+
+The values of `left` and `top` defined the location of the top-left corner of the image. 
+
+Again, the `json2xlsx` function is rather for internal purpose, and the user can include the images with the help of the `hwriteXLSX` function. 
+The user has to pass a named list to the argument `images` of the `hwriteXLSX` function, such as the one corresponding to the above JSON string:
+
+```{r, echo=FALSE, comment=NA}
+images
+```
+
+See `?hwriteXLSX` for a full example. 
