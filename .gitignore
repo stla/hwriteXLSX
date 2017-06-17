@@ -8,3 +8,4 @@ inst/testing/*.*
 !inst/testing/*.R
 man/
 /*.xlsx
+inst/doc

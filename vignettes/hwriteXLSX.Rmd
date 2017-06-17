@@ -1,0 +1,138 @@
+---
+title: "The hwriteXLSX package"
+author: "Stéphane Laurent"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{The hwriteXLSX package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse=TRUE)
+```
+
+```{r packages}
+library(hwriteXLSX)
+```
+
+```{r, echo=FALSE}
+removeNULL <- function(x){
+    x <- Filter(Negate(is.null), x)
+    if( is.list(x) ){
+      x <- lapply( x, function(y) Filter(length, removeNULL(y)))
+    }
+    return(x)
+}
+A1 <- cell(1, 1, "text")
+A2 <- cell(1, 2, 9.9, numberFormat="2Decimal")
+B3 <- cell(2, 3, "abc", bold=TRUE, color="red", comment="this cell is red")
+sheet <- removeNULL(list(Sheet1 = c(A1, A2, B3)))
+```
+
+# The heart: `json2xlsx`
+
+The function at the heart of `hwriteXLSX` is `json2xlsx`. Its main arguments are two JSON strings and the name of an output XLSX file. 
+The first JSON string defines the cells of the workbook while the second one defines the images to be included in the workbook. 
+
+Below is a possible example of the first JSON string:
+
+```{r, echo=FALSE}
+jsonlite::toJSON(sheet, pretty = TRUE, auto_unbox = TRUE)
+```
+
+This JSON string is returned by the command `jsonlite::toJSON(sheet, auto_unbox=TRUE)` where `sheet` is the following nested list:
+
+```{r}
+sheet
+```
+
+This nested list `sheet` can be obtained with the help of the `cell` function of the `hwriteXLSX` package:
+
+```{r, eval=FALSE}
+A1 <- cell(1, 1, "text")
+A2 <- cell(1, 2, 9.9, numberFormat="2Decimal")
+B3 <- cell(2, 3, "abc", bold=TRUE, color="red", comment="this cell is red")
+sheet <- list(Sheet1 = c(A1, A2, B3))
+```
+
+# The `hwriteXLSX` function
+
+The function `json2xlsx` is rather for internal purpose. 
+Once you get a sheet represented as a nested list, you can create the XLSX file with the help of the `hwriteXLSX` function:
+
+```{r, eval=FALSE}
+hwriteXLSX("myxlsx.xlsx", worksheet = sheet)
+```
+
+Now assume you want to write a worksheet with two sheets, for example with this second sheet:
+
+```{r, eval=FALSE}
+A1 <- cell(1, 1, "hi")
+B1 <- cell(2, 1, "hello")
+sheet2 <- list(Sheet2 = c(A1, B1))
+```
+
+Proceed as follows:
+
+```{r, eval=FALSE}
+hwriteXLSX("myxlsx.xlsx", worksheet = c(sheet, sheet2))
+```
+
+
+# Create a sheet from a data object
+
+A sheet can be created from a dataframe with the help of the `createSheet` function:
+
+```{r, eval=FALSE}
+sheet <- createSheet(iris, "Sheet1")
+```
+
+But this does not allow to format the cells neither to include comments. 
+The most general way to create a sheet with the `createSheet` function, allowing formatting and inclusion of comments, is to use a list of lists:
+
+```{r, eval=FALSE}
+dat <-
+  list(
+    A = list(1, 2, 3),
+    B = list(NULL, "a", 1000),
+    C = list(NA, "b")
+  )
+attr(dat$B[[2]], "color") <- "red"
+attr(dat$B[[2]], "comment") <- "this cell is red"
+attr(dat$C[[1]], "comment") <- "this cell is empty"
+sheet <- createSheet(dat, "Sheet1")
+```
+
+Thus, if you want to create a sheet from a dataframe and to format a cell or include a comment, you can proceed as follows:
+
+```{r, eval=FALSE}
+dat <- lapply(as.list(mtcars), as.list)
+attr(dat$drat[[6]], "color") <- "red"
+attr(dat$drat[[6]], "comment") <- "this value is low"
+sheet <- createSheet(dat, "Sheet1")
+```
+
+# Dates
+
+Dates in XLSX files are stored as integers: the number of days between the date and a certain origin. 
+For example, if you want to create a cell with the date `2017-06-14`, using the `cell` function, you have to pass the integer representing this date and to set a date format:
+
+```{r, eval=FALSE}
+A1 <- cell(1, 1, 42900, numberFormat = "MmDdYy")
+```
+
+Instead of doing so, you can use the `cellDate` function:
+
+```{r, eval=FALSE}
+A1 <- cellDate(1, 1, "2017-06-14")
+```
+
+The function `createSheet` automatically creates a date cell from the values having a date class (`Date` or `POSIXt`). 
+
+
+
+# Inclusion of images
