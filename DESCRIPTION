@@ -10,7 +10,6 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: grDevices,
-    openxlsx,
     jsonlite,
     anytime,
     dict

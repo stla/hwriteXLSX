@@ -2,6 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
+inst/bin
+inst/todo
 inst/libs/
 inst/haskell/
 inst/testing/*.*

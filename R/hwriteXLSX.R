@@ -74,8 +74,9 @@
 #' json <- jsonlite::toJSON(c(sheet1, sheet2), null="null", auto_unbox = TRUE)
 #' \donttest{json2xlsx(json, outfile="numberFormats.xlsx")}
 cell <- function(col, row, value, comment=NULL, numberFormat=NULL, fontname=NULL, bold=NULL, color=NULL){
-  cellRef <- paste0(openxlsx:::convert_to_excel_ref(col, LETTERS), row)
+  #cellRef <- paste0(openxlsx:::convert_to_excel_ref(col, LETTERS), row)
   # ou bien paste0(cellranger::num_to_letter(col), row)
+  cellRef <- paste0(int_to_letter(col), row)
   setNames(list(createCell(
     value = value,
     comment = comment,

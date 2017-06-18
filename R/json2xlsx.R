@@ -35,5 +35,23 @@ json2xlsx <- function(json1, json2="{}", outfile, overwrite=FALSE){
   if(json1 == "{}" && json2 == "{}"){
     stop("`json1` and `json2` cannot be both empty.")
   }
-  .json2xlsx(json1, json2, outfile)
+  .json2xlsx(iconv(json1, "latin1", "UTF-8"), iconv(json2, "latin1", "UTF-8"), outfile)
+}
+
+json2xlsx2 <- function(json1, json2="{}", outfile, overwrite=FALSE){
+  if(!overwrite && file.exists(outfile)){
+    stop(sprintf("File `%s` already exists.", outfile))
+  }
+  if(!jsonlite::validate(json1)){
+    stop("Invalid JSON string `json1`.")
+  }
+  if(!jsonlite::validate(json2)){
+    stop("Invalid JSON string `json2`.")
+  }
+  if(json1 == "{}" && json2 == "{}"){
+    stop("`json1` and `json2` cannot be both empty.")
+  }
+  exe <- system.file("bin", "writexlsx.exe", package="hwriteXLSX")
+  command <- sprintf("%s -c %s -i %s -o %s", exe, shQuote(json1), shQuote(json2), shQuote(outfile))
+  system(command)
 }

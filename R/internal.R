@@ -21,3 +21,14 @@ createFormat <- function(numberFormat=NULL, font=NULL){
 createCell <- function(value=NULL, format=NULL, comment=NULL){
   return(list(value=value, format=format, comment=comment))
 }
+
+int_to_letter <- function(col) {
+  #stopifnot(is.numeric(y))
+  ret <- integer()
+  while (col > 0) {
+    remainder <- ((col - 1)%%26) + 1
+    ret <- c(remainder, ret)
+    col <- (col - remainder)%/%26
+  }
+  paste0(LETTERS[ret], collapse = "")
+}
