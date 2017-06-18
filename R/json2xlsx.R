@@ -35,7 +35,7 @@ json2xlsx <- function(json1, json2="{}", outfile, overwrite=FALSE){
   if(json1 == "{}" && json2 == "{}"){
     stop("`json1` and `json2` cannot be both empty.")
   }
-  .json2xlsx(iconv(json1, "latin1", "UTF-8"), iconv(json2, "latin1", "UTF-8"), outfile)
+  .json2xlsx(json1, json2, outfile)
 }
 
 json2xlsx2 <- function(json1, json2="{}", outfile, overwrite=FALSE){
