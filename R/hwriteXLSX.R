@@ -12,6 +12,7 @@
 #'
 #' @return A named list representing a cell.
 #' @export
+#' @importFrom stats setNames
 #'
 #' @details xxx
 #'
@@ -139,14 +140,15 @@ cellDate <- function(col, row, date, comment=NULL, fontname=NULL, bold=NULL,
       dateValue <- as.integer(dateParsed - as.Date("1899-12-30"))
     }
   }
-  cellRef <- paste0(openxlsx:::convert_to_excel_ref(col, LETTERS), row)
+  cellRef <- paste0(int_to_letter(col), row)
   setNames(list(createCell(
     value = dateValue,
     comment = comment,
     format = createFormat(numberFormat = "yyyy-mm-dd;@",
                           font = createFont(name = fontname,
                                             bold = bold,
-                                            color = color)))), cellRef)
+                                            color = color)))),
+    cellRef)
 }
 
 

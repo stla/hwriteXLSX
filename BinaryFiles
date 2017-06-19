@@ -1,0 +1,5 @@
+bin/writexlsx.exe
+
+libs/i386/json2xlsx.dll
+
+libs/x64/json2xlsx.dll

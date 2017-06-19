@@ -4,7 +4,7 @@ input <- "{\"a\":\"?\"}"
 Encoding(input) <- "UTF-8"
 input <- "{\"a\":\"µ\"}"
 input <- "{\"a\":\"\u00b5\"}"
-input <- jsonlite::toJSON(list(a="Âµ"), auto_unbox = TRUE)
+input <- jsonlite::toJSON(list(a="µ"), auto_unbox = TRUE)
 .C("readText", input=input, output="")
 .C("readJson1", input=input, result="") # failure
 .C("readJson1", input=iconv(input, "latin1", "UTF-8"), result="") # failure!!
@@ -12,8 +12,8 @@ input <- jsonlite::toJSON(list(a="Âµ"), auto_unbox = TRUE)
 .C("readJson3", input=input, result="")
 dyn.unload("C:/HaskellProjects/utf8dll/utf8dll.dll")
 
-x <- "{\"a\":\"Âµ\"}"
-y <- jsonlite::toJSON(list(a="Âµ"), auto_unbox = TRUE)
+x <- "{\"a\":\"µ\"}"
+y <- jsonlite::toJSON(list(a="µ"), auto_unbox = TRUE)
 y <- as.character(y)
 # x and y are identical:
 identical(x,y)

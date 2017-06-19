@@ -1,12 +1,14 @@
 Package: hwriteXLSX
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Write XLSX Worksheets
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: GPL-3
+Date: 2017-06-19
+Author: Stéphane Laurent
+Maintainer: Stéphane Laurent <laurent_step@yahoo.fr>
+Description: Write XLSX worksheets, allowing inclusion of images.
+URL: https://github.com/stla/hwriteXLSX
+BugReports: https://github.com/stla/hwriteXLSX/issues
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: grDevices,
@@ -15,5 +17,6 @@ Imports: grDevices,
     dict
 RoxygenNote: 6.0.1
 Suggests: knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 VignetteBuilder: knitr

@@ -49,6 +49,7 @@ possibly_date <- function(x){
 #'      \item If \code{returnDates=TRUE}, the date if the date format if guessed, \code{FALSE} if no date format is guessed.
 #' }
 #' @export
+#' @importFrom stats na.omit
 #' @author Cole Beck.
 #' @examples
 #' guessDateFormat("2017-03-04")
