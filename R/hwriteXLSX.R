@@ -3,8 +3,8 @@
 #'
 #' @param col integer, the column index
 #' @param row integer, the row index
-#' @param value cell value
-#' @param comment cell comment
+#' @param value cell value, a numeric or character scalar
+#' @param comment cell comment, character
 #' @param numberFormat number format; see Details
 #' @param fontname font name; see Details
 #' @param bold set \code{TRUE} for bold font
@@ -14,9 +14,14 @@
 #' @export
 #' @importFrom stats setNames
 #'
-#' @details xxx
+#' @details The number format can be a predefined format or a custom format, such
+#' as \code{"yyyy-mm-dd;@"}. Predefined number formats are illustrated in the examples.
+#' The font name must be a name available in Excel, such as \code{"Courier"} or
+#' \code{"Verdana"}.
+#' The color name must be a name among the ones returned by \code{grDevices::colors()};
+#' see the example of \code{\link{json2xlsx}}.
 #'
-#' @seealso \code{\link{cellDate}} to create a cell for a date
+#' @seealso \code{\link{cellDate}} to create a cell for a date.
 #'
 #' @examples
 #' A1 <- cell(1, 1, 9.9, numberFormat="2Decimal")
@@ -98,6 +103,7 @@ cell <- function(col, row, value, comment=NULL, numberFormat=NULL, fontname=NULL
 #' @param fontname font name; see \code{\link{cell}}
 #' @param bold set \code{TRUE} for bold font
 #' @param color color name; see \code{\link{cell}}
+#' @param dateFormat the date format
 #' @param ... arguments passed to \code{\link[anytime]{anydate}}
 #'
 #' @return A named list representing a cell.
@@ -128,7 +134,7 @@ cell <- function(col, row, value, comment=NULL, numberFormat=NULL, fontname=NULL
 #' A1 <- cellDate(1, 1, "x")
 #' unlist(A1)
 cellDate <- function(col, row, date, comment=NULL, fontname=NULL, bold=NULL,
-                     color=NULL, ...){
+                     color=NULL, dateFormat="yyyy-mm-dd;@", ...){
   if(is.na(date) || is.null(date)){
     dateValue <- NULL
   }else{
@@ -144,7 +150,7 @@ cellDate <- function(col, row, date, comment=NULL, fontname=NULL, bold=NULL,
   setNames(list(createCell(
     value = dateValue,
     comment = comment,
-    format = createFormat(numberFormat = "yyyy-mm-dd;@",
+    format = createFormat(numberFormat = dateFormat,
                           font = createFont(name = fontname,
                                             bold = bold,
                                             color = color)))),

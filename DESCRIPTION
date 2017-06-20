@@ -3,14 +3,17 @@ Type: Package
 Title: Write XLSX Worksheets
 Version: 0.1.0
 Date: 2017-06-19
-Author: Stéphane Laurent
-Maintainer: Stéphane Laurent <laurent_step@yahoo.fr>
+Author: St?phane Laurent
+Maintainer: St?phane Laurent <laurent_step@yahoo.fr>
 Description: Write XLSX worksheets, allowing inclusion of images.
 URL: https://github.com/stla/hwriteXLSX
 BugReports: https://github.com/stla/hwriteXLSX/issues
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
+BinaryFiles: inst/bin/writexlsx.exe,
+    inst/libs/i386/json2xlsx.dll,
+    inst/libs/x64/json2xlsx.dll
 Imports: grDevices,
     jsonlite,
     anytime,
