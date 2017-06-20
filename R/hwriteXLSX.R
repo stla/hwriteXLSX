@@ -5,6 +5,7 @@
 #' @param row integer, the row index
 #' @param value cell value, a numeric or character scalar
 #' @param comment cell comment, character
+#' @param commentAuthor author of the comment, character
 #' @param numberFormat number format; see Details
 #' @param fontname font name; see Details
 #' @param bold set \code{TRUE} for bold font
@@ -79,13 +80,13 @@
 #' sheet2 <- list(dateFormats = do.call(c, c(A,B)))
 #' json <- jsonlite::toJSON(c(sheet1, sheet2), null="null", auto_unbox = TRUE)
 #' \donttest{json2xlsx(json, outfile="numberFormats.xlsx")}
-cell <- function(col, row, value, comment=NULL, numberFormat=NULL, fontname=NULL, bold=NULL, color=NULL){
+cell <- function(col, row, value, comment=NULL, commentAuthor=NULL, numberFormat=NULL, fontname=NULL, bold=NULL, color=NULL){
   #cellRef <- paste0(openxlsx:::convert_to_excel_ref(col, LETTERS), row)
   # ou bien paste0(cellranger::num_to_letter(col), row)
   cellRef <- paste0(int_to_letter(col), row)
   setNames(list(createCell(
     value = value,
-    comment = comment,
+    comment = createComment(text=comment, author=commentAuthor),
     format = createFormat(numberFormat = numberFormat,
                           font = createFont(name = fontname,
                                             bold = bold,

@@ -1,10 +1,10 @@
 Package: hwriteXLSX
 Type: Package
 Title: Write XLSX Worksheets
-Version: 0.1.0
-Date: 2017-06-19
-Author: St?phane Laurent
-Maintainer: St?phane Laurent <laurent_step@yahoo.fr>
+Version: 0.1.0.9000
+Date: 2017-06-20
+Author: Stéphane Laurent
+Maintainer: Stéphane Laurent <laurent_step@yahoo.fr>
 Description: Write XLSX worksheets, allowing inclusion of images.
 URL: https://github.com/stla/hwriteXLSX
 BugReports: https://github.com/stla/hwriteXLSX/issues

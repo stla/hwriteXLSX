@@ -18,6 +18,13 @@ createFormat <- function(numberFormat=NULL, font=NULL){
   list(numberFormat=numberFormat, font=font)
 }
 
+createComment <- function(text=NULL, author=NULL){
+  if(is.null(text))
+    return(NULL)
+  else
+    return(list(text=text, author=author))
+}
+
 createCell <- function(value=NULL, format=NULL, comment=NULL){
   return(list(value=value, format=format, comment=comment))
 }
