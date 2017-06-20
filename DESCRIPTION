@@ -17,7 +17,8 @@ BinaryFiles: inst/bin/writexlsx.exe,
 Imports: grDevices,
     jsonlite,
     anytime,
-    dict
+    dict,
+    readr
 RoxygenNote: 6.0.1
 Suggests: knitr,
     rmarkdown,

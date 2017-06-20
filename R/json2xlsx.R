@@ -38,6 +38,8 @@ json2xlsx <- function(json1, json2="{}", outfile, overwrite=FALSE){
   .json2xlsx(json1, json2, outfile)
 }
 
+
+#' @importFrom readr write_file
 json2xlsx2 <- function(json1, json2="{}", outfile, overwrite=FALSE){
   if(!overwrite && file.exists(outfile)){
     stop(sprintf("File `%s` already exists.", outfile))
@@ -51,7 +53,12 @@ json2xlsx2 <- function(json1, json2="{}", outfile, overwrite=FALSE){
   if(json1 == "{}" && json2 == "{}"){
     stop("`json1` and `json2` cannot be both empty.")
   }
+  jsonFile1 <- tempfile(fileext = ".json")
+  readr::write_file(as.character(json1), path=jsonFile1)
+  jsonFile2 <- tempfile(fileext = ".json")
+  readr::write_file(as.character(json2), path=jsonFile2)
   exe <- system.file("bin", "writexlsx.exe", package="hwriteXLSX")
-  command <- sprintf("%s -c %s -i %s -o %s", exe, shQuote(json1), shQuote(json2), shQuote(outfile))
+  command <- sprintf("%s -c %s -i %s -o %s", exe,
+                     shQuote(jsonFile1), shQuote(jsonFile2), shQuote(outfile))
   system(command)
 }

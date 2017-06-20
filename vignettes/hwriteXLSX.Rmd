@@ -151,7 +151,7 @@ Below is an example of such a JSON string:
 json
 ```
 
-The values of `left` and `top` defined the location of the top-left corner of the image. 
+The values of `left` and `top` define the location of the top-left corner of the image. 
 
 Again, the `json2xlsx` function is rather for internal purpose, and the user can include the images with the help of the `hwriteXLSX` function. 
 The user has to pass a named list to the argument `images` of the `hwriteXLSX` function, such as the one corresponding to the above JSON string:
