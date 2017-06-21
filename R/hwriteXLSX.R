@@ -10,6 +10,7 @@
 #' @param fontname font name; see Details
 #' @param bold set \code{TRUE} for bold font
 #' @param color color name; see Details
+#' @param fill color name; see Details
 #'
 #' @return A named list representing a cell.
 #' @export
@@ -20,7 +21,7 @@
 #' The font name must be a name available in Excel, such as \code{"Courier"} or
 #' \code{"Verdana"}.
 #' The color name must be a name among the ones returned by \code{grDevices::colors()};
-#' see the example of \code{\link{json2xlsx}}.
+#' see the example of \code{\link{json2xlsx}} or \code{\link{hwriteXLSX}}.
 #'
 #' @seealso \code{\link{cellDate}} to create a cell for a date.
 #'
@@ -80,7 +81,7 @@
 #' sheet2 <- list(dateFormats = do.call(c, c(A,B)))
 #' json <- jsonlite::toJSON(c(sheet1, sheet2), null="null", auto_unbox = TRUE)
 #' \donttest{json2xlsx(json, outfile="numberFormats.xlsx")}
-cell <- function(col, row, value, comment=NULL, commentAuthor=NULL, numberFormat=NULL, fontname=NULL, bold=NULL, color=NULL){
+cell <- function(col, row, value, comment=NULL, commentAuthor=NULL, numberFormat=NULL, fontname=NULL, bold=NULL, color=NULL, fill=NULL){
   #cellRef <- paste0(openxlsx:::convert_to_excel_ref(col, LETTERS), row)
   # ou bien paste0(cellranger::num_to_letter(col), row)
   cellRef <- paste0(int_to_letter(col), row)
@@ -90,7 +91,8 @@ cell <- function(col, row, value, comment=NULL, commentAuthor=NULL, numberFormat
     format = createFormat(numberFormat = numberFormat,
                           font = createFont(name = fontname,
                                             bold = bold,
-                                            color = color)))), cellRef)
+                                            color = color),
+                          fill = fill))), cellRef)
 }
 
 #' @title Date cell
@@ -100,10 +102,12 @@ cell <- function(col, row, value, comment=NULL, commentAuthor=NULL, numberFormat
 #' @param row integer, the row index
 #' @param date an input which will be parsed to a date through the
 #' \code{\link[anytime]{anydate}} function
-#' @param comment cell comment
+#' @param comment cell comment, character
+#' @param commentAuthor author of the comment, character
 #' @param fontname font name; see \code{\link{cell}}
 #' @param bold set \code{TRUE} for bold font
 #' @param color color name; see \code{\link{cell}}
+#' @param fill color name; see \code{\link{cell}}
 #' @param dateFormat the date format
 #' @param ... arguments passed to \code{\link[anytime]{anydate}}
 #'
@@ -134,7 +138,8 @@ cell <- function(col, row, value, comment=NULL, commentAuthor=NULL, numberFormat
 #' unlist(A1)
 #' A1 <- cellDate(1, 1, "x")
 #' unlist(A1)
-cellDate <- function(col, row, date, comment=NULL, fontname=NULL, bold=NULL,
+cellDate <- function(col, row, date, comment=NULL, commentAuthor=NULL,
+                     fontname=NULL, bold=NULL,
                      color=NULL, dateFormat="yyyy-mm-dd;@", ...){
   if(is.na(date) || is.null(date)){
     dateValue <- NULL
@@ -147,15 +152,18 @@ cellDate <- function(col, row, date, comment=NULL, fontname=NULL, bold=NULL,
       dateValue <- as.integer(dateParsed - as.Date("1899-12-30"))
     }
   }
-  cellRef <- paste0(int_to_letter(col), row)
-  setNames(list(createCell(
-    value = dateValue,
-    comment = comment,
-    format = createFormat(numberFormat = dateFormat,
-                          font = createFont(name = fontname,
-                                            bold = bold,
-                                            color = color)))),
-    cellRef)
+  cell(col, row, value=dateValue, comment=comment, commentAuthor=commentAuthor,
+       numberFormat=dateFormat, fontname=fontname, bold=bold,
+       color=color, fill=fill)
+  # cellRef <- paste0(int_to_letter(col), row)
+  # setNames(list(createCell(
+  #   value = dateValue,
+  #   comment = createComment(text=comment, author=commentAuthor),
+  #   format = createFormat(numberFormat = dateFormat,
+  #                         font = createFont(name = fontname,
+  #                                           bold = bold,
+  #                                           color = color)))),
+  #   cellRef)
 }
 
 
@@ -197,12 +205,14 @@ createSheet <- function(dat, sheetname){
         if(is_date(value)){
           D[[c(i+1,j)]] <- cellDate(j, i+1, value,
                                     comment = attr(value, "comment"),
+                                    commentAuthor = attr(value, "commentAuthor"),
                                     color = attr(value, "color"),
                                     fontname = attr(value, "fontname"),
                                     bold = attr(value, "bold"))
         }else{
           D[[c(i+1,j)]] <- cell(j, i+1, value,
                                 comment = attr(value, "comment"),
+                                commentAuthor = attr(value, "commentAuthor"),
                                 color = attr(value, "color"),
                                 fontname = attr(value, "fontname"),
                                 bold = attr(value, "bold"),

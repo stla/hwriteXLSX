@@ -14,6 +14,9 @@
 #' @export
 #' @importFrom jsonlite validate
 #'
+#' @note This function is rather for internal purpose. The user should use
+#' \code{\link{hwriteXLSX}}.
+#'
 #' @examples
 #' colorMatrix <- matrix(grDevices::colours(), ncol=9)
 #' f <- function(i, j){

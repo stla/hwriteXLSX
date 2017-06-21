@@ -14,8 +14,13 @@ createFont <- function(name=NULL, bold=NULL, color=NULL){
   list(name=name, bold=bold, color=color)
 }
 
-createFormat <- function(numberFormat=NULL, font=NULL){
-  list(numberFormat=numberFormat, font=font)
+createFormat <- function(numberFormat=NULL, font=NULL, fill=NULL){
+  if(!is.null(fill)){
+    if(! fill %in% grDevices::colours()){
+      stop("Invalid color name.")
+    }
+  }
+  list(numberFormat=numberFormat, font=font, fill=fill)
 }
 
 createComment <- function(text=NULL, author=NULL){
