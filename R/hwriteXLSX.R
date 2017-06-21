@@ -140,7 +140,7 @@ cell <- function(col, row, value, comment=NULL, commentAuthor=NULL, numberFormat
 #' unlist(A1)
 cellDate <- function(col, row, date, comment=NULL, commentAuthor=NULL,
                      fontname=NULL, bold=NULL,
-                     color=NULL, dateFormat="yyyy-mm-dd;@", ...){
+                     color=NULL, fill=NULL, dateFormat="yyyy-mm-dd;@", ...){
   if(is.na(date) || is.null(date)){
     dateValue <- NULL
   }else{

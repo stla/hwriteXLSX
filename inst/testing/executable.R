@@ -1,6 +1,6 @@
 setwd("~/MyPackages/hwriteXLSX/inst/testing")
 
-A1 <- cell(1, 1, 9.9, numberFormat="2Decimal")
+A1 <- cell(1, 1, 9.9, numberFormat="2Decimal", fill="green")
 B3 <- cell(2, 3, "µµ", bold=TRUE, color="red", comment="Stéphane")
 sheet <- list(Sheet1 = c(A1, B3))
 # JSON string ready for json2xlsx

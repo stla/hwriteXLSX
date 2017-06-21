@@ -8,7 +8,7 @@ test_that("utf8 - json2xlsx", {
   dat <- readxl::read_xlsx(tmpXlsx, sheet = 1, col_names = FALSE)
   expect_equal(as.data.frame(dat)[1,1], "µ")
   # utf8 in cell comment
-  sheet <- "{\"Sheet1\":{\"A1\":{\"value\":\"µ\",\"comment\":\"µ\"}}}"
+  sheet <- "{\"Sheet1\":{\"A1\":{\"value\":\"µ\",\"comment\":{\"text\":\"µ\"}}}}"
   tmpXlsx <- tempfile(fileext = ".xlsx")
   expect_silent(json2xlsx(sheet, outfile=tmpXlsx))
   txl <- suppressWarnings(tidyxl::tidy_xlsx(tmpXlsx, sheets=1))
