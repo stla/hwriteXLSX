@@ -1,8 +1,8 @@
 Package: hwriteXLSX
 Type: Package
 Title: Write XLSX Worksheets
-Version: 0.1.0.9000
-Date: 2017-06-20
+Version: 0.2.0.9000
+Date: 2017-06-22
 Author: Stéphane Laurent
 Maintainer: Stéphane Laurent <laurent_step@yahoo.fr>
 Description: Write XLSX worksheets, allowing inclusion of images.
@@ -22,5 +22,6 @@ Imports: grDevices,
 RoxygenNote: 6.0.1
 Suggests: knitr,
     rmarkdown,
-    testthat
+    testthat,
+    readxl
 VignetteBuilder: knitr

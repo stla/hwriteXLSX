@@ -30,8 +30,10 @@ createComment <- function(text=NULL, author=NULL){
     return(list(text=text, author=author))
 }
 
-createCell <- function(value=NULL, format=NULL, comment=NULL){
-  return(list(value=value, format=format, comment=comment))
+createCell <- function(value=NULL, format=NULL, comment=NULL,
+                       colspan=NULL, rowspan=NULL){
+  return(list(value=value, format=format, comment=comment,
+              colspan=colspan, rowspan=rowspan))
 }
 
 int_to_letter <- function(col) {

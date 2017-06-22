@@ -29,7 +29,8 @@ removeNULL <- function(x){
 }
 A1 <- cell(1, 1, "text")
 A2 <- cell(1, 2, 9.9, numberFormat="2Decimal")
-B3 <- cell(2, 3, "abc", bold=TRUE, color="red", comment="this cell is red")
+B3 <- cell(2, 3, "abc", bold=TRUE, color="red", 
+           comment="this cell is red", commentAuthor="John Doe")
 sheet <- removeNULL(list(Sheet1 = c(A1, A2, B3)))
 ```
 

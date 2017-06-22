@@ -4,6 +4,8 @@
 #' @param col integer, the column index
 #' @param row integer, the row index
 #' @param value cell value, a numeric or character scalar
+#' @param colspan integer, number of columns the cell spans
+#' @param rowspan integer, number of rows the cell spans
 #' @param comment cell comment, character
 #' @param commentAuthor author of the comment, character
 #' @param numberFormat number format; see Details
@@ -81,12 +83,16 @@
 #' sheet2 <- list(dateFormats = do.call(c, c(A,B)))
 #' json <- jsonlite::toJSON(c(sheet1, sheet2), null="null", auto_unbox = TRUE)
 #' \donttest{json2xlsx(json, outfile="numberFormats.xlsx")}
-cell <- function(col, row, value, comment=NULL, commentAuthor=NULL, numberFormat=NULL, fontname=NULL, bold=NULL, color=NULL, fill=NULL){
+cell <- function(col, row, value, colspan=NULL, rowspan=NULL,
+                 comment=NULL, commentAuthor=NULL,
+                 numberFormat=NULL, fontname=NULL, bold=NULL,
+                 color=NULL, fill=NULL){
   #cellRef <- paste0(openxlsx:::convert_to_excel_ref(col, LETTERS), row)
   # ou bien paste0(cellranger::num_to_letter(col), row)
   cellRef <- paste0(int_to_letter(col), row)
   setNames(list(createCell(
     value = value,
+    colspan = colspan, rowspan = rowspan,
     comment = createComment(text=comment, author=commentAuthor),
     format = createFormat(numberFormat = numberFormat,
                           font = createFont(name = fontname,
@@ -102,6 +108,8 @@ cell <- function(col, row, value, comment=NULL, commentAuthor=NULL, numberFormat
 #' @param row integer, the row index
 #' @param date an input which will be parsed to a date through the
 #' \code{\link[anytime]{anydate}} function
+#' @param colspan integer, number of columns the cell spans
+#' @param rowspan integer, number of rows the cell spans
 #' @param comment cell comment, character
 #' @param commentAuthor author of the comment, character
 #' @param fontname font name; see \code{\link{cell}}
@@ -138,7 +146,8 @@ cell <- function(col, row, value, comment=NULL, commentAuthor=NULL, numberFormat
 #' unlist(A1)
 #' A1 <- cellDate(1, 1, "x")
 #' unlist(A1)
-cellDate <- function(col, row, date, comment=NULL, commentAuthor=NULL,
+cellDate <- function(col, row, date, colspan=NULL, rowspan=NULL,
+                     comment=NULL, commentAuthor=NULL,
                      fontname=NULL, bold=NULL,
                      color=NULL, fill=NULL, dateFormat="yyyy-mm-dd;@", ...){
   if(is.na(date) || is.null(date)){
@@ -152,7 +161,8 @@ cellDate <- function(col, row, date, comment=NULL, commentAuthor=NULL,
       dateValue <- as.integer(dateParsed - as.Date("1899-12-30"))
     }
   }
-  cell(col, row, value=dateValue, comment=comment, commentAuthor=commentAuthor,
+  cell(col, row, value=dateValue, colspan=colspan, rowspan=rowspan,
+       comment=comment, commentAuthor=commentAuthor,
        numberFormat=dateFormat, fontname=fontname, bold=bold,
        color=color, fill=fill)
   # cellRef <- paste0(int_to_letter(col), row)
@@ -204,16 +214,22 @@ createSheet <- function(dat, sheetname){
         value <- column[[i]]
         if(is_date(value)){
           D[[c(i+1,j)]] <- cellDate(j, i+1, value,
+                                    colspan = attr(value, "colspan"),
+                                    rowspan = attr(value, "rowspan"),
                                     comment = attr(value, "comment"),
                                     commentAuthor = attr(value, "commentAuthor"),
                                     color = attr(value, "color"),
+                                    fill = attr(value, "fill"),
                                     fontname = attr(value, "fontname"),
                                     bold = attr(value, "bold"))
         }else{
           D[[c(i+1,j)]] <- cell(j, i+1, value,
+                                colspan = attr(value, "colspan"),
+                                rowspan = attr(value, "rowspan"),
                                 comment = attr(value, "comment"),
                                 commentAuthor = attr(value, "commentAuthor"),
                                 color = attr(value, "color"),
+                                fill = attr(value, "fill"),
                                 fontname = attr(value, "fontname"),
                                 bold = attr(value, "bold"),
                                 numberFormat = attr(value, "numberFormat"))
