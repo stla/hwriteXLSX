@@ -60,7 +60,11 @@ json2xlsx2 <- function(json1, json2="{}", outfile, overwrite=FALSE){
   readr::write_file(as.character(json1), path=jsonFile1)
   jsonFile2 <- tempfile(fileext = ".json")
   readr::write_file(as.character(json2), path=jsonFile2)
-  exe <- system.file("bin", "writexlsx.exe", package="hwriteXLSX")
+  if(.Platform$OS.type == "windows"){
+    exe <- system.file("bin", "windows", "writexlsx.exe", package="hwriteXLSX")
+  }else{
+    exe <- system.file("bin", "unix", "writexlsx", package="hwriteXLSX")
+  }
   command <- sprintf("%s -c %s -i %s -o %s", exe,
                      shQuote(jsonFile1), shQuote(jsonFile2), shQuote(outfile))
   system(command)

@@ -183,7 +183,7 @@ cellDate <- function(col, row, date, colspan=NULL, rowspan=NULL,
 #' @param dat appropriate data input (see examples and vignette)
 #' @param sheetname name of the sheet
 #'
-#' @return A named list containing one element: the list of cells
+#' @return A named list containing one element: the list of cells.
 #' @export
 #' @import dict
 #'
@@ -205,6 +205,7 @@ cellDate <- function(col, row, date, colspan=NULL, rowspan=NULL,
 #' attr(dat$B[[2]], "comment") <- "this cell is red"
 #' attr(dat$C[[1]], "comment") <- "this cell is empty"
 #' sheet <- createSheet(dat, "Sheet1")
+#' \donttest{hwriteXLSX("xlsx.xlsx", sheet)}
 createSheet <- function(dat, sheetname){
   D <- dict()
   for(j in seq_along(dat)){
