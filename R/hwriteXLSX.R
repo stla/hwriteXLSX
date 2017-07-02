@@ -249,6 +249,7 @@ createSheet <- function(dat, sheetname){
 #' or a series of such sheets concatenated by \code{c}.
 #' @param images a named list defining the images to be included in the worksheet;
 #' see vignette and examples
+#' @param passwords a named list defining the passwords for the sheets
 #' @param file name of the xlsx file to be written
 #' @param overwrite logical, whether to overwrite the output file if it already exists
 #'
@@ -261,6 +262,8 @@ createSheet <- function(dat, sheetname){
 #' sheet2 <- createSheet(mtcars, "mtcars")
 #' worksheet <- c(sheet1, sheet2)
 #' \donttest{hwriteXLSX("xlsx.xlsx", worksheet)}
+#' # protect one sheet
+#' \donttest{hwriteXLSX("xlsx.xlsx", worksheet, passwords = list(iris="pwd"))}
 #' # include some images
 #' image1File <- system.file("images", "Lissajous.png", package="hwriteXLSX")
 #' image2File <- system.file("images", "power.png", package="hwriteXLSX")
@@ -289,7 +292,7 @@ createSheet <- function(dat, sheetname){
 #' attr(dat$C[[1]], "comment") <- "this cell is empty"
 #' sheet <- createSheet(dat, "Sheet1")
 #' \donttest{hwriteXLSX("xlsx.xlsx", sheet, overwrite = TRUE)}
-hwriteXLSX <- function(file, worksheet, images=NULL, overwrite=FALSE){
+hwriteXLSX <- function(file, worksheet, images=NULL, passwords=NULL, overwrite=FALSE){
   if(!overwrite && file.exists(file)){
     stop(sprintf("File `%s` already exists.", file))
   }
@@ -303,5 +306,10 @@ hwriteXLSX <- function(file, worksheet, images=NULL, overwrite=FALSE){
   }else{
     jsonImages <- jsonlite::toJSON(images, null="null", auto_unbox = TRUE)
   }
-  json2xlsx(jsonCells, jsonImages, outfile=file, overwrite=TRUE)
+  if(is.null(passwords)){
+    jsonPasswords <- "{}"
+  }else{
+    jsonPasswords <- jsonlite::toJSON(passwords, null="null", auto_unbox = TRUE)
+  }
+  json2xlsx(jsonCells, jsonImages, jsonPasswords, outfile=file, overwrite=TRUE)
 }

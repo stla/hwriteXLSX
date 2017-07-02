@@ -4,12 +4,15 @@
 \alias{json2xlsx}
 \title{Write a XLSX file from a JSON string}
 \usage{
-json2xlsx(json1, json2 = "{}", outfile, overwrite = FALSE)
+json2xlsx(json1, json2 = "{}", json3 = "{}", outfile, overwrite = FALSE,
+  dll = FALSE)
 }
 \arguments{
 \item{json1}{JSON string for the cells}
 
 \item{json2}{JSON string for the images}
+
+\item{json3}{JSON string for the passwords}
 
 \item{outfile}{name of output file}
 

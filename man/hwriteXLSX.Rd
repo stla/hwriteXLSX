@@ -4,7 +4,8 @@
 \alias{hwriteXLSX}
 \title{Write XLSX file}
 \usage{
-hwriteXLSX(file, worksheet, images = NULL, overwrite = FALSE)
+hwriteXLSX(file, worksheet, images = NULL, passwords = NULL,
+  overwrite = FALSE)
 }
 \arguments{
 \item{file}{name of the xlsx file to be written}
@@ -14,6 +15,8 @@ or a series of such sheets concatenated by \code{c}.}
 
 \item{images}{a named list defining the images to be included in the worksheet;
 see vignette and examples}
+
+\item{passwords}{a named list defining the passwords for the sheets}
 
 \item{overwrite}{logical, whether to overwrite the output file if it already exists}
 }
@@ -29,6 +32,8 @@ sheet1 <- createSheet(iris, "iris")
 sheet2 <- createSheet(mtcars, "mtcars")
 worksheet <- c(sheet1, sheet2)
 \donttest{hwriteXLSX("xlsx.xlsx", worksheet)}
+# protect one sheet
+\donttest{hwriteXLSX("xlsx.xlsx", worksheet, passwords = list(iris="pwd"))}
 # include some images
 image1File <- system.file("images", "Lissajous.png", package="hwriteXLSX")
 image2File <- system.file("images", "power.png", package="hwriteXLSX")
