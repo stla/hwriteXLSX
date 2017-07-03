@@ -29,6 +29,7 @@ json2xlsx2_exe <- function(json1, json2="{}", json3="{}", outfile){
 #' @param json3 JSON string for the passwords
 #' @param outfile name of output file
 #' @param overwrite logical, whether to overwrite `outfile` if it exists
+#' @param dll logical, whether to use the DLL or the executable
 #'
 #' @return No returned value.
 #' @export

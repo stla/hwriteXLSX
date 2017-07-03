@@ -44,7 +44,7 @@ sheet <- list(Sheet1 = c(A1, B3))
 # JSON string ready for json2xlsx
 json <- jsonlite::toJSON(sheet, null="null", auto_unbox = TRUE)
 #json <- iconv(json, "latin1", "UTF-8") maintenant dans le code
-hwriteXLSX:::.json2xlsx(json, "{}", outfile="xlsx.xlsx")
+hwriteXLSX:::.json2xlsx(json, "{}", "{}", outfile="xlsx.xlsx")
 
 
 
@@ -61,7 +61,8 @@ sheet <- createSheet(dat, "Sheet1")
 hwriteXLSX("utf8.xlsx", sheet, overwrite = TRUE)
 
 ##
-hwriteXLSX:::json2xlsx2(jsonlite::toJSON(sheet, auto_unbox = TRUE, null="null"), "{}", "xlsx.xlsx", overwrite = TRUE)
+hwriteXLSX:::json2xlsx2(jsonlite::toJSON(sheet, auto_unbox = TRUE, null="null"),
+                        "{}", "xlsx.xlsx", overwrite = TRUE)
 
 
 ##

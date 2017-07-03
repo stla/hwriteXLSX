@@ -162,3 +162,8 @@ images
 ```
 
 See `?hwriteXLSX` for a full example. 
+
+
+# Sheet protection
+
+Finally, it is possible to protect a sheet by providing a password. See the example in `?hwriteXLSX`. 

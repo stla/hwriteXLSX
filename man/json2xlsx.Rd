@@ -17,6 +17,8 @@ json2xlsx(json1, json2 = "{}", json3 = "{}", outfile, overwrite = FALSE,
 \item{outfile}{name of output file}
 
 \item{overwrite}{logical, whether to overwrite `outfile` if it exists}
+
+\item{dll}{logical, whether to use the DLL or the executable}
 }
 \value{
 No returned value.
